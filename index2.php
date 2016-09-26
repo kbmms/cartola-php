@@ -10,13 +10,15 @@
 	<style>
 	body {
 		background: rgb(233, 233, 233);
+		background: url(http://subtlepatterns2015.subtlepatterns.netdna-cdn.com/patterns/sativa.png);
 	}
 	.box-time .col-md-3 {
 		width: 
 	}
 		.box-time {
 	    background: #fff;
-	    background: url(img/2144.jpg);
+/*	    background: #e1e1e1;
+	    background: url(img/2144.jpg);*/
 	    background-size: cover;
 	    padding: 0;
 	    margin: 3px;
@@ -24,7 +26,7 @@
 	    border-bottom: 2px solid #ccc;
 		}
 		.nome h5, .jogadores h5 {
- /*   font-size: 10px;*/
+    font-size: 10px;
     text-transform: uppercase;
     font-weight: bolder;
     font-family: 'Carrois Gothic', sans-serif;
@@ -47,6 +49,22 @@
 	}
 	.row.jog-all {
     border-bottom: 1px solid #fff;
+}
+
+h5.lblApelido {
+    color: #000;
+}
+
+.row.jog-all {
+    border-bottom: 1px solid #f3eaea;
+}
+.pos h5 {
+	color: #ccc;
+}
+.time-nome {
+    background: #539ced;
+    color: #fff;
+    padding: 10px;
 }
 @media (min-width: 992px){
 .box-time.col-md-3 {
@@ -82,7 +100,7 @@ for ($i = 0; $i < count($array); ++$i) {
 
 for ($j = 0; $j < count($jogadores); ++$j) {
 		print '<div class="box-time col-md-3">';
-	 print '<div class="col-md-12"><div class="col-md-3"><img src="'.$jogadores[$j]->{'time'}->{'url_escudo_png'}.'" class="imgTime img-responsive" /></div>';		
+	 print '<div class="col-md-12 time-nome"><div class="col-md-3"><img src="'.$jogadores[$j]->{'time'}->{'url_escudo_png'}.'" class="imgTime img-responsive" /></div>';		
 		// print '<h3>'.round($jogadores[$j]->{'pontos'},2).'</h3>';
 	print  '<div class="nome col-md-7"><h5>' .$jogadores[$j]->{'time'}->{'nome'}.'</h5></div>';
 	print  '<div class="col-md-1"><h5>' .round($jogadores[$j]->{'pontos'},2).'</h5></div>';
