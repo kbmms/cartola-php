@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-br" lang="pt-br">
 <head>
+	<link href="https://fonts.googleapis.com/css?family=Carrois+Gothic" rel="stylesheet">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="initial-scale=0.9, maximum-scale=0.9">
 	<title>Placar da Rodada Qualihouse Cartola</title>
@@ -17,19 +18,40 @@
 	    background: #fff;
 	    background: url(img/2144.jpg);
 	    background-size: cover;
-	    padding: 5px;
+	    padding: 0;
 	    margin: 3px;
 	    border-radius: 3px;
 	    border-bottom: 2px solid #ccc;
 		}
 		.nome h5, .jogadores h5 {
-    font-size: 10px;
+ /*   font-size: 10px;*/
     text-transform: uppercase;
     font-weight: bolder;
+    font-family: 'Carrois Gothic', sans-serif;
 		}
-	.escudo img {
-		margin-top: 50%;
+	.escudo  {
+		position: relative;
+		height: 31px;
+    width: 40px;
 	}
+	.box-dentro-img {
+		    top: 50%;
+    transform: translateY(-50%);
+    position: absolute;
+	}
+	.verde {
+		color: green;
+	}
+	.vermelho {
+		color: red;
+	}
+	.row.jog-all {
+    border-bottom: 1px solid #fff;
+}
+@media (min-width: 992px){
+.box-time.col-md-3 {
+    width: 24%;
+}}
 	</style>
 </head>
 <body>
@@ -41,7 +63,15 @@
 	</div>
 </div>
 <?php
-	$array = array("Leeds-United-A","Chapeu-de-palha-team"); 
+	$array = array("Leeds-United-A","Chapeu-de-palha-team", "Os-Tabarel", "ZYC"); 
+
+
+    $urlStatus = 'https://api.cartolafc.globo.com/mercado/status';
+	$siteStatus = file_get_contents($urlStatus);
+	$jsonStatus =	json_decode($siteStatus);
+	$status = $jsonStatus->{'status_mercado'};
+
+
 
 for ($i = 0; $i < count($array); ++$i) {
 	$url = 'https://api.cartolafc.globo.com/time/'.$array[$i];
@@ -66,10 +96,16 @@ for ($j = 0; $j < count($jogadores); ++$j) {
 	});
 	for($k = 0; $k < count($jogadores[$j]->{'atletas'}); ++$k){
 			print '<div class="row jog-all">';
-			print '<div class="escudo col-md-2"><img class="img-responsive" src="'.retornaEscudo($escalados[$k]->{'clube_id'}).'" /></div>';
+			print '<div class="escudo col-md-2"><div class="box-dentro-img"><img class="img-responsive" src="'.retornaEscudo($escalados[$k]->{'clube_id'}).'" /></div></div>';
 			print '<div class="pos col-md-2"><h5>'.retornaPosicao($escalados[$k]->{'posicao_id'}).'</h5></div>';
-			print '<div class="col-md-8"><h5 class="lblApelido">'.$escalados[$k]->{'apelido'}.'</h5></div>';
-			print '</div>';	
+			print '<div class="col-md-6"><h5 class="lblApelido">'.$escalados[$k]->{'apelido'}.'</h5></div>';
+				if($status != 1){
+					$pontosAtual = retornaPontos($escalados[$k]->{'atleta_id'});
+				}else{
+					$pontosAtual = $escalados[$k]->{'pontos_num'};
+				}			
+			print '<div class="col-md-2 '. retornaCor($pontosAtual) .'"><h5>'.$escalados[$k]->{'pontos_num'}.'</div>';
+			print '</h5></div>';	
 	}
 	 	print '</div>';	
 	 	print '</div>';	
@@ -81,6 +117,16 @@ for ($j = 0; $j < count($jogadores); ++$j) {
 function retornaPosicao($pos){
 	$posicoes = array("", "GOL", "LAT", "ZAG", "MEI", "ATA", "TEC");
 	return $posicoes[$pos];
+}
+
+function retornaCor($valor){
+	if($valor > 0){
+		return "verde";
+	}else if ($valor < 0) {
+		return "vermelho";
+	}else {
+		return "";
+	}
 }
 
 function retornaEscudo($idclube){
